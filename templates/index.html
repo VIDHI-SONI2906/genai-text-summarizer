@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text Summarizer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+    <div class="container">
+        <h1>Text Summarizer</h1>
+        <form method="POST" action="/summarize">
+            <textarea name="text" rows="10" placeholder="Paste your text here..." required>{{ original_text if original_text else '' }}</textarea>
+
+            <input type="number" name="length" value="100" min="40" max="500" placeholder="Summary Length (max tokens)">
+            
+            <select name="format">
+                <option value="narrative" {% if format == 'narrative' %}selected{% endif %}>Narrative</option>
+                <option value="bullet" {% if format == 'bullet' %}selected{% endif %}>Bullet Points</option>
+                <option value="table" {% if format == 'table' %}selected{% endif %}>Table</option>
+            </select>
+
+            <button type="submit">Summarize</button>
+        </form>
+
+        <form method="POST" action="/upload" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".txt,.pdf,.docx" required>
+            <button type="submit">Upload</button>
+        </form>
+
+        <div class="theme-toggle" onclick="document.body.classList.toggle('dark-mode')">Toggle Theme</div>
+
+        {% if original_text %}
+        <div class="original-box">
+            <label>Original Text:</label>
+            <p>{{ original_text }}</p>
+        </div>
+        {% endif %}
+
+        {% if summary %}
+        <div class="summary-box">
+            <label>Summary:</label>
+            <p>{{ summary|safe }}</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
